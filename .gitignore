@@ -1,0 +1,4 @@
+.vscode
+a.out.data
+node_modules/
+sox/
