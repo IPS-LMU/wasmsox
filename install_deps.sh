@@ -11,7 +11,7 @@ git clone git://git.code.sf.net/p/sox/code sox
 cd sox
 # checkout release using tag
 git checkout sox-14.4.1
-# delete line 420 as it is not neaded
+# delete line 420 as it is not needed
 # as we don't need file-type detection with pipes
 sed -i '/\w*#error FIX NEEDED HERE/d' src/formats.c
 

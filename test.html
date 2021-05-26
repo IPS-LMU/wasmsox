@@ -1,51 +1,72 @@
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- including ECharts file -->
-    <script src="./node_modules/echarts/dist/echarts.min.js"></script>
-    <title>Test page for wasmsox</title>
-    <base href=".">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- including ECharts file -->
+  <script src="./node_modules/echarts/dist/echarts.min.js"></script>
+  <title>Test page for wasmsox</title>
+  <base href=".">
 </head>
 <body>
-<h1>Test page for wasmsox</h1>
-<audio id="audio" controls autoplay></audio>
-
-<script src="./a.out.js"></script>
-<script>
-
-  async function loadAudio(src) {
-    // Load audio
-    const audio_ab = await fetch(src).then(resp => resp.arrayBuffer());
-    return audio_ab;
-  }
-
-  Module.onRuntimeInitialized = async _ => {
-    const api = {
-      performSox: Module.cwrap('performSox', 'number', ['string', 'string'])
-    };
-
-    // load audio file as arrayBuffer using fetch:
-    const audioFileBuffer = await loadAudio('./resources/msajc003.wav');
+  <h1>Test page for wasmsox</h1>
+  
+  <h2>Enter sox command here:</h2>
+  <p><b>Hint</b> there is an input file saved to the file system called input.wav </p>
+  <input 
+  id="sox_command" 
+  type="text" 
+  size="100"
+  value="sox input.wav output.wav lowpass 100.0">
+  <p>
+    <button onclick="runCommand()">run command</button>
+  </p>
+  <h2>If a file named <code>output.wav</code> is generated you can play it here:</h2>
+  <audio id="audio" controls autoplay></audio>
+  
+  <h2>sox output</h2>
+  <b>TODO: capture output</b>
+  
+  <script src="./a.out.js"></script>
+  <script>
+    let inited = false;
+    let api = undefined;
     
-    // save arraybufferview to FS -> so fopen() in wasmassp can read file
-    FS.writeFile('audiofile.wav', new Uint8Array(audioFileBuffer));
-    // use exposed api function performedAssp:
-    let return_code = api.performSox("audiofile.wav", // path to audio file that is to be proc.
-                                      "testout.wav" // path to output file
-                                    );
-    console.log(return_code);                                      
-    if(return_code === 0){
-      // add file to audio element 4 playback
-      let out_file = FS.readFile("testout.wav");
-      const blob = new Blob([out_file], { type: "audio/wav" });
-      document.getElementById('audio').src = window.URL.createObjectURL(blob);;
-
-  }
-}
-</script>
-
+    async function loadAudio(src) {
+      // Load audio
+      const audio_ab = await fetch(src).then(resp => resp.arrayBuffer());
+      return audio_ab;
+    }
+    
+    function runCommand(){
+      console.log(api);
+      // use exposed api function performedAssp:
+      let return_code = api.performSox(document.getElementById('sox_command').value);
+      console.log(return_code);                                      
+      if(return_code === 0){
+        // add file to audio element 4 playback
+        let out_file = FS.readFile("output.wav");
+        const blob = new Blob([out_file], { type: "audio/wav" });
+        document.getElementById('audio').src = window.URL.createObjectURL(blob);;
+        FS.unlink("output.wav");
+      }
+    }
+    
+    Module.onRuntimeInitialized = async _ => {
+      api = {
+        performSox: Module.cwrap('performSox', 'number', ['string'])
+      };
+      
+      // load audio file as arrayBuffer using fetch:
+      const audioFileBuffer = await loadAudio('./resources/msajc003.wav');
+      
+      // save arraybufferview to FS -> so fopen() in wasmassp can read file
+      FS.writeFile('input.wav', new Uint8Array(audioFileBuffer));
+      
+      inited = true;
+    }
+  </script>
+  
 </body>
 </html>
 

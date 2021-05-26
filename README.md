@@ -13,6 +13,6 @@ webassembly version of the sox (http://sox.sourceforge.net/)
 
 ## TODO
 
-- don't just implement example -> implement the main function to have full access to all the sox features
+- fix: rerunning command or new command causes crash!
 - check which file types could be added (e.g. MP3s using lame)
 - make NPM package out of this repo
