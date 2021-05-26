@@ -1,0 +1,50 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!-- including ECharts file -->
+    <script src="node_modules/echarts/dist/echarts.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+<h1>Test page for wasmsox</h1>
+<audio id="audio" controls autoplay></audio>
+
+<script src="/a.out.js"></script>
+<script>
+
+  async function loadAudio(src) {
+    // Load audio
+    const audio_ab = await fetch(src).then(resp => resp.arrayBuffer());
+    return audio_ab;
+  }
+
+  Module.onRuntimeInitialized = async _ => {
+    const api = {
+      performSox: Module.cwrap('performSox', 'number', ['string', 'string'])
+    };
+
+    // load audio file as arrayBuffer using fetch:
+    const audioFileBuffer = await loadAudio('/resources/msajc003.wav');
+    
+    // save arraybufferview to FS -> so fopen() in wasmassp can read file
+    FS.writeFile('audiofile.wav', new Uint8Array(audioFileBuffer));
+    // use exposed api function performedAssp:
+    let return_code = api.performSox("audiofile.wav", // path to audio file that is to be proc.
+                                      "testout.wav" // path to output file
+                                    );
+    console.log(return_code);                                      
+    if(return_code === 0){
+      // add file to audio element 4 playback
+      let out_file = FS.readFile("testout.wav");
+      const blob = new Blob([out_file], { type: "audio/wav" });
+      document.getElementById('audio').src = window.URL.createObjectURL(blob);;
+
+  }
+}
+</script>
+
+</body>
+</html>
+

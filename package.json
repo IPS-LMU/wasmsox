@@ -1,0 +1,22 @@
+{
+  "name": "wasmassp",
+  "version": "0.0.1",
+  "description": "webassembly wrapper for the libassp",
+  "main": "a.out.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IPS-LMU/wasmassp.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/IPS-LMU/wasmassp/issues"
+  },
+  "homepage": "https://github.com/IPS-LMU/wasmassp#readme",
+  "dependencies": {
+    "echarts": "^4.3.0"
+  }
+}
