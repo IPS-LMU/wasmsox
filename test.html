@@ -17,7 +17,7 @@
   id="sox_command" 
   type="text" 
   size="100"
-  value="sox input.wav output.wav lowpass 100.0">
+  value="sox --i input.wav">
   <p>
     <button onclick="runCommand()">run command</button>
   </p>
@@ -27,7 +27,7 @@
   <h2>sox output</h2>
   <b>TODO: capture output</b>
   
-  <script src="./a.out.js"></script>
+  <script src="./wasmsox.js"></script>
   <script>
     let inited = false;
     let api = undefined;
@@ -52,6 +52,7 @@
       }
     }
     
+
     Module.onRuntimeInitialized = async _ => {
       api = {
         performSox: Module.cwrap('performSox', 'number', ['string'])
