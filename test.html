@@ -41,7 +41,11 @@
     function runCommand(){
       console.log(api);
       // use exposed api function performedAssp:
-      let return_code = api.performSox(document.getElementById('sox_command').value);
+      try{
+        let return_code = api.performSox(document.getElementById('sox_command').value);
+      } catch(e){
+        console.error(e);
+      }
       console.log(return_code);                                      
       if(return_code === 0){
         // add file to audio element 4 playback
