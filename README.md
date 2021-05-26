@@ -1,6 +1,6 @@
 # wasmsox
 
-webassembly version of the sox )(http://sox.sourceforge.net/)
+webassembly version of the sox (http://sox.sourceforge.net/)
 
 ## compile:
 
