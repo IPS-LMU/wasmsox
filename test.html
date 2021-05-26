@@ -27,7 +27,7 @@
     };
 
     // load audio file as arrayBuffer using fetch:
-    const audioFileBuffer = await loadAudio('/resources/msajc003.wav');
+    const audioFileBuffer = await loadAudio('./resources/msajc003.wav');
     
     // save arraybufferview to FS -> so fopen() in wasmassp can read file
     FS.writeFile('audiofile.wav', new Uint8Array(audioFileBuffer));
